@@ -1,5 +1,5 @@
 {
-  ".agents/memory/MEMORY.md": "db6997879b906257ab5db5549e2cb71647e97ed9c7f060ba18d366d830aaf15c",
+  ".agents/memory/MEMORY.md": "2310689fdf3a7f1bd597b42bce4431cd9ee5e38a4fab2eb6d925bb03c532ab58",
   ".agents/memory/judging-product.md": "2be75f5dd12218668850eea629be469f14c7fc9b320f0b4488301824d2819d89",
   ".agents/memory/preview-public-fetch.md": "822b916f4a27affe48b20decd9a636278969dd530397ecadbc50f116052f6aa0",
   ".agents/memory/test-bundling.md": "d22ebe3d9a22f8a404f6eab3435acfbee02b08d71bc7889c8ce99b5ea1baf0cc",
@@ -258,5 +258,6 @@
   "scripts/src/hello.ts": "9a865c3de9900891e697e1ee8632dd565ce69bd7cb6b610e48b26bc0ee9e81e9",
   "scripts/tsconfig.json": "636dea76ed898c62e56d6657ed97bb3edc85feb0ea8256b5198849d5c6cf462a",
   "tsconfig.base.json": "2dfaa6f6168f618e0e6deff048c17e4f5f73d59325bd935d471905ae6773585c",
-  "tsconfig.json": "8883c5dbf9e073ef0c7e91769b3e4abccca022df69b62fa7518d73e1512b37ef"
+  "tsconfig.json": "8883c5dbf9e073ef0c7e91769b3e4abccca022df69b62fa7518d73e1512b37ef",
+  ".agents/memory/github-access.md": "8cd616f97a98b5ce58593ac99c758f7b643246cfb6f84ac57befdd2bfc311cea"
 }

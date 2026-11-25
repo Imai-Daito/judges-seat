@@ -1,3 +1,4 @@
 - [観戦・採点の方針](judging-product.md) — スマホで友達と審査するアプリの、ユーザーが選択した遊び方。
 - [閲覧専用ページのプレビュー通信](preview-public-fetch.md) — 匿名閲覧でもプレビュー側の同一オリジンCookieが通信に必要な場合がある。
 - [Node用テストの依存解決](test-bundling.md) — ソース公開のワークスペース依存はNode用バンドルで外部化すると実行時に解決できないことがある。
+- [GitHubへの保存経路](github-access.md) — 連携APIから利用できなくても、認証済みGitHub CLIが使える場合がある。
