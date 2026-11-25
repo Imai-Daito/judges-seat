@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "審査員席"
+description = "同じテレビを囲む友達が、それぞれのスマホから採点・投票し、幹事の合図で結果を発表するアプリ。"
+version = "1.0.0"
+id = "artifacts/judges-seat"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 24471
+
+[services.development]
+run = "pnpm --filter @workspace/judges-seat run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/judges-seat", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/judges-seat/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "24471"
+BASE_PATH = "/"

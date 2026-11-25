@@ -1,0 +1,60 @@
+/*
+ * The official M-1 homepage's campaign artwork pairs a black stage with
+ * vivid red and gold, using heavy forward-leaning gothic display lettering.
+ * Keep that broadcast energy in the product typography without copying the
+ * event wordmark; body copy stays upright for easy reading on a phone.
+ */
+.js-app .js-brand-title,
+.js-app .js-title,
+.js-app .js-artist,
+.js-app .js-wait-box h3,
+.js-app .js-wait-number,
+.js-app .js-card-title,
+.js-app .js-rank-name,
+.js-app .js-rank-detail,
+.js-app .js-modal h2,
+.js-app .js-reveal-mast h1,
+.js-app .js-result-winner,
+.js-app .js-total-rank,
+.js-app .js-laurel,
+.js-app .js-panel-kicker {
+  font-family: "Noto Sans JP", sans-serif;
+  font-style: italic;
+  font-weight: 900;
+  letter-spacing: .025em;
+}
+
+.js-app .js-brand-title {
+  letter-spacing: .1em;
+}
+
+.js-app .js-title {
+  letter-spacing: .035em;
+  display: inline-block;
+  max-width: 100%;
+}
+
+.js-app .js-artist {
+  letter-spacing: .04em;
+}
+
+.js-app .js-score-number,
+.js-app .js-rank-no,
+.js-app .js-rank-total,
+.js-app .js-slot-score,
+.js-app .js-big-score,
+.js-app .js-total-num {
+  font-style: italic;
+  font-weight: 900;
+}
+
+.js-app .js-button,
+.js-app .js-nav-btn,
+.js-app .js-segment button {
+  font-style: italic;
+}
+
+.js-app :focus-visible {
+  outline: 2px solid #ffe35c;
+  outline-offset: 3px;
+}

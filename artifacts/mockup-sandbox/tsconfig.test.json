@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.json",
+  "include": ["src/components/mockups/judges-seat/judging.ts", "src/components/mockups/judges-seat/judging.test.ts"],
+  "exclude": [],
+  "compilerOptions": {
+    "incremental": false
+  }
+}

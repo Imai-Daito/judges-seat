@@ -1,0 +1,51 @@
+html, body, #root { margin: 0; min-height: 100%; background: #050507; }
+body { color: #fff9e8; font-family: "Noto Sans JP", sans-serif; }
+button, input, textarea, select { font: inherit; }
+button { cursor: pointer; }
+button:disabled { cursor: not-allowed; opacity: .4; }
+.js-app .js-input { width: 100%; min-width: 0; color: #fff9e8; background: #100e11; }
+.js-app textarea { resize: vertical; line-height: 1.8; }
+.js-app .qr { margin: 20px auto; width: fit-content; background: white; line-height: 0; }
+.js-app .invite-link { display: block; overflow-wrap: anywhere; color: #ffdf6c; font-size: 12px; margin-top: 12px; }
+.js-app .history-line { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 0; border-bottom: 1px solid #ffffff19; font-size: 12px; }
+.js-app .js-total-num { color: #ffdc38; font-family: "Noto Sans JP", sans-serif; font-size: clamp(72px, 22vw, 112px); font-style: normal; font-weight: 900; letter-spacing: -.05em; -webkit-text-stroke: .65px #d71022; paint-order: stroke fill; text-shadow: none; }
+.js-app .js-score-slot .js-slot-score { font-family: "Noto Sans JP", sans-serif; font-size: clamp(42px, 14vw, 66px); font-style: normal; font-weight: 900; letter-spacing: -.04em; }
+.js-app .js-score-slot .js-slot-name { font-family: "Noto Sans JP", sans-serif; font-style: italic; font-weight: 900; overflow-wrap: anywhere; }
+.js-app .js-score-face .js-big-score { font-family: "Noto Sans JP", sans-serif; font-size: 96px; font-style: normal; font-weight: 900; letter-spacing: -.04em; }
+.js-app .js-score-face .js-big-name { font-family: "Noto Sans JP", sans-serif; font-style: italic; font-weight: 900; }
+.js-app .js-score-face { overflow: hidden; }
+.js-app .js-reveal-stage { min-height: 580px; }
+.js-app .js-flying-card { transform-style: preserve-3d; }
+.js-app .js-final-candidate { margin: 8px 0; }
+.js-app .js-card .js-button.is-wide { margin-top: 14px; }
+.js-app .js-bottom-nav { grid-template-columns: repeat(4, minmax(0, 1fr)); padding-bottom: max(9px, env(safe-area-inset-bottom)); }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+.share-choice { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 18px 0 4px; }
+.share-choice-btn { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 56px; padding: 10px; border: 2px solid #ffd23f; background: #0d0a0e; color: #ffd23f; font-style: italic; font-weight: 900; transform: skewX(-6deg); transition: transform .15s, background .15s; }
+.share-choice-btn.is-active { background: #d71022; border-color: #d71022; color: #fff9e8; }
+.share-choice-btn:active { transform: skewX(-6deg) scale(.97); }
+.share-warning { border-left: 5px solid #d71022; background: #d710221f; padding: 12px 14px; margin: 10px 0; font-size: 12px; line-height: 1.7; }
+.share-warning strong { color: #ffd23f; font-style: italic; font-weight: 900; }
+.share-warning p { margin: 4px 0 0; }
+.share-count { margin: 14px 0 10px; font-weight: 700; }
+.share-count strong { color: #ffd23f; font-size: 32px; font-weight: 900; margin-right: 4px; }
+.share-previews { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.share-preview { margin: 0; background: #141016; border: 1px solid #ffffff22; }
+.share-preview img { display: block; width: 100%; height: auto; }
+.share-preview figcaption { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; padding: 8px; font-size: 11px; font-weight: 900; }
+.share-preview a { display: inline-flex; gap: 4px; align-items: center; color: #ffd23f; }
+.share-preview > a { display: block; width: 100%; }
+.share-skeleton { height: 220px; margin: 12px 0; background: linear-gradient(90deg, #141016 30%, #241a20 50%, #141016 70%); background-size: 200% 100%; animation: share-shimmer 1.2s linear infinite; }
+.share-skeleton.is-short { height: 64px; }
+@keyframes share-shimmer { to { background-position: -200% 0; } }
+.share-status { display: flex; align-items: baseline; justify-content: space-between; margin: 12px 0; }
+.share-status span { font-style: italic; font-weight: 900; color: #bfb49a; }
+.share-status span.is-on { color: #ffd23f; }
+.share-status small { font-size: 11px; color: #bfb49a; }
+.share-url { font-size: 12px; }
+.share-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+.public-results { padding-bottom: 40px; }
+.public-results .js-ranking-item { grid-template-columns: 32px minmax(0, 1fr) auto; }
+.public-results .public-vote-tally { grid-template-columns: minmax(0, 1fr) auto; }
+.public-results .js-title, .public-results .js-result-winner, .public-results .js-rank-name, .public-results .history-line { overflow-wrap: anywhere; min-width: 0; }
+.public-results .js-rank-no, .public-results .js-rank-total, .public-results .num { font-style: normal; }

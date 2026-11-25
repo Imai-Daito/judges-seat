@@ -1,0 +1,20 @@
+{
+  "name": "@workspace/scripts",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "hello": "tsx ./src/hello.ts",
+    "test:judging": "tsx --test ../artifacts/api-server/src/lib/*.test.ts",
+    "test:sharing-api": "tsx ../artifacts/api-server/tests/sharing.integration.mjs",
+    "test:sharing": "tsx --test ../artifacts/judges-seat/src/share-export.test.ts",
+    "test:judging-api": "tsx ../artifacts/api-server/tests/rooms.integration.mjs",
+    "test:judging-limits": "tsx ../artifacts/api-server/tests/rooms.rate-limits.mjs",
+    "test:judging-sync": "tsx --tsconfig ../artifacts/judges-seat/tests/tsconfig.json --test ../artifacts/judges-seat/tests/*.test.mjs",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "tsx": "catalog:"
+  }
+}

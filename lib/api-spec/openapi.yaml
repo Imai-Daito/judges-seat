@@ -1,0 +1,313 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: API specification
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+paths:
+  /rooms/{id}/sharing:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: string } }
+    get:
+      operationId: getResultSharing
+      responses:
+        "200":
+          description: Organizer only
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ResultSharing" }
+    post:
+      operationId: setResultSharing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/SharingInput" }
+      responses:
+        "429": { $ref: "#/components/responses/RoomRateLimited" }
+        "200":
+          description: Organizer only; disabling destroys the previous token
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ResultSharing" }
+  /shared-results/{token}:
+    parameters:
+      - { name: token, in: path, required: true, schema: { type: string } }
+    get:
+      operationId: getSharedResults
+      responses:
+        "200":
+          description: Public allowlisted results only; no-store
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/PublicResults" }
+        "404":
+          description: Invalid, disabled or expired link
+  /rooms:
+    post:
+      operationId: createRoom
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/RoomInput" }
+      responses:
+        "429": { $ref: "#/components/responses/RoomRateLimited" }
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/RoomSnapshot" }
+  /rooms/{id}:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: string } }
+    get:
+      operationId: getRoom
+      responses:
+        "200":
+          description: Participant-specific snapshot; never contains others' unpublished scores or votes
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/RoomSnapshot" }
+  /rooms/{id}/join:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: string } }
+    post:
+      operationId: joinRoom
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/MemberInput" }
+      responses:
+        "429": { $ref: "#/components/responses/RoomRateLimited" }
+        "200":
+          description: Joined or reconnected
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/RoomSnapshot" }
+  /rooms/{id}/actions:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: string } }
+    post:
+      operationId: actOnRoom
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/RoomAction" }
+      responses:
+        "429": { $ref: "#/components/responses/RoomRateLimited" }
+        "200":
+          description: Updated snapshot
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/RoomSnapshot" }
+  /rooms/{id}/events:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: string } }
+    get:
+      operationId: roomEvents
+      responses:
+        "200":
+          description: Authenticated SSE revision events, without scores or votes. Reconnect then GET snapshot.
+          content:
+            text/event-stream:
+              schema: { type: string }
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      description: Process liveness only; does not check database availability. Use /readyz for readiness.
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+  /readyz:
+    get:
+      operationId: readinessCheck
+      tags: [health]
+      summary: Database readiness check
+      description: Read-only check of required tables and SELECT access, with a one-second deadline including pool acquisition. No database address or error details are returned. Responses must not be cached.
+      responses:
+        "200":
+          description: Database is available for required reads; not a guarantee that writes will succeed
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ReadyStatus" }
+        "503":
+          description: Database unavailable, schema inaccessible, pool busy or check timed out
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/NotReadyStatus" }
+components:
+  responses:
+    RoomRateLimited:
+      description: Shared database rate limit exceeded; retry only after the indicated delay
+      headers:
+        Retry-After:
+          schema: { type: integer, minimum: 1 }
+          description: Seconds until this budget resets
+        RateLimit-Limit:
+          schema: { type: integer }
+        RateLimit-Remaining:
+          schema: { type: integer, minimum: 0 }
+        RateLimit-Reset:
+          schema: { type: integer, minimum: 1 }
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [error]
+            properties:
+              error: { type: string }
+  schemas:
+    ReadyStatus:
+      type: object
+      additionalProperties: false
+      required: [status]
+      properties:
+        status: { type: string, enum: [ok] }
+    NotReadyStatus:
+      type: object
+      additionalProperties: false
+      required: [status]
+      properties:
+        status: { type: string, enum: [unavailable] }
+    SharingInput:
+      type: object
+      required: [enabled]
+      properties:
+        enabled: { type: boolean }
+    ResultSharing:
+      type: object
+      required: [enabled, token, expiresAt]
+      properties:
+        enabled: { type: boolean }
+        token: { type: ["string", "null"] }
+        expiresAt: { type: string }
+    PublicBallot:
+      type: object
+      required: [published, candidates, votes]
+      properties:
+        published: { type: boolean }
+        candidates: { type: array, items: { type: string } }
+        votes: { type: object, additionalProperties: { type: string } }
+    PublicResults:
+      type: object
+      required: [title, members, performers, rounds, final, runoff, expiresAt]
+      properties:
+        title: { type: string }
+        members: { type: array, items: { $ref: "#/components/schemas/RoomMember" } }
+        performers: { type: array, items: { $ref: "#/components/schemas/Performer" } }
+        rounds: { type: array, items: { $ref: "#/components/schemas/ScoreRound" } }
+        final: { $ref: "#/components/schemas/PublicBallot" }
+        runoff: { $ref: "#/components/schemas/PublicBallot" }
+        expiresAt: { type: string }
+    MemberInput:
+      type: object
+      required: [nickname]
+      properties:
+        nickname: { type: string, minLength: 1, maxLength: 10 }
+    RoomInput:
+      type: object
+      required: [nickname, title, performers, retentionDays]
+      properties:
+        nickname: { type: string, minLength: 1, maxLength: 10 }
+        title: { type: string, minLength: 1, maxLength: 60 }
+        performers:
+          type: array
+          minItems: 2
+          maxItems: 30
+          items: { type: string, minLength: 1, maxLength: 30 }
+        retentionDays: { type: integer, enum: [30] }
+    RoomAction:
+      type: object
+      required: [type, version]
+      properties:
+        type:
+          type: string
+          enum: [configure, start, select, score, publishScore, finalists, vote, publishVote, runoff]
+        version: { type: integer, minimum: 0 }
+        title: { type: string, minLength: 1, maxLength: 60 }
+        names:
+          type: array
+          minItems: 2
+          maxItems: 30
+          items: { type: string, minLength: 1, maxLength: 30 }
+        performerId: { type: string }
+        score: { type: integer, minimum: 0, maximum: 100 }
+        candidates:
+          type: array
+          minItems: 2
+          uniqueItems: true
+          items: { type: string }
+        runoff: { type: boolean }
+    RoomMember:
+      type: object
+      required: [id, name]
+      properties:
+        id: { type: string }
+        name: { type: string }
+    Performer:
+      type: object
+      required: [id, name]
+      properties:
+        id: { type: string }
+        name: { type: string }
+    ScoreRound:
+      type: object
+      required: [performerId, scores, publishedAt]
+      properties:
+        performerId: { type: string }
+        scores:
+          type: object
+          additionalProperties: { type: integer }
+        publishedAt: { type: integer }
+    VoteState:
+      type: object
+      required: [candidates, submitted, votes, published, ownVote]
+      properties:
+        candidates: { type: array, items: { type: string } }
+        submitted: { type: array, items: { type: string } }
+        votes: { type: object, additionalProperties: { type: string } }
+        published: { type: boolean }
+        ownVote: { type: ["string", "null"] }
+    RoomSnapshot:
+      type: object
+      required: [id, title, version, me, hostId, members, performers, started, activeId, submitted, ownScore, rounds, final, runoff, expiresAt, serverTime]
+      properties:
+        id: { type: string }
+        title: { type: string }
+        version: { type: integer }
+        me: { type: string }
+        hostId: { type: string }
+        members: { type: array, items: { $ref: "#/components/schemas/RoomMember" } }
+        performers: { type: array, items: { $ref: "#/components/schemas/Performer" } }
+        started: { type: boolean }
+        activeId: { type: ["string", "null"] }
+        submitted: { type: array, items: { type: string } }
+        ownScore: { type: ["integer", "null"] }
+        rounds: { type: array, items: { $ref: "#/components/schemas/ScoreRound" } }
+        final: { $ref: "#/components/schemas/VoteState" }
+        runoff: { $ref: "#/components/schemas/VoteState" }
+        expiresAt: { type: string }
+        serverTime: { type: integer }
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+
