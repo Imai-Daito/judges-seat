@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "Typecheck on source edit",
+  "description": "Runs the workspace typecheck after TypeScript edits under artifacts/ or lib/ so behavior invariants in .kiro/steering stay verified.",
+  "trigger": {
+    "type": "onFileEdit",
+    "filePattern": "{artifacts,lib}/**/*.ts"
+  },
+  "action": {
+    "type": "runCommand",
+    "command": "pnpm run typecheck"
+  }
+}
